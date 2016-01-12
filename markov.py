@@ -47,12 +47,26 @@ def make_chains(text_string):
 def make_text(chains):
     """Takes dictionary of markov chains; returns random text."""
 
-    text = ""
+    text = "Would you"
+    while True:   
+        # splitting text into a list, and indexing the words in the list
+        try:
+            text_list = text.split()
+            current_pair = (text_list[-2], text_list[-1])
+            # print current_pair
 
-    # your code goes here
+            # try to to fetch a random value for the current_pair in our dictionary and add it to text string
+            try:
+                text = text + " " + choice(chains[current_pair])
+            except IndexError:
+                break
+                return text
+            # print text
+        except KeyError:
+            break
+            return text
 
     return text
-
 
 input_path = "green-eggs.txt"
 
