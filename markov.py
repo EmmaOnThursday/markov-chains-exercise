@@ -47,10 +47,13 @@ def make_chains(text_string):
 def make_text(chains):
     """Takes dictionary of markov chains; returns random text."""
 
-    text = "Would you"
+    first_key = choice(chains.keys())
+    # print first_key
+    text = first_key[0] + " " + first_key[1]
+
     while True:   
         # splitting text into a list, and indexing the words in the list
-        try:
+   
             text_list = text.split()
             current_pair = (text_list[-2], text_list[-1])
             # print current_pair
@@ -62,9 +65,6 @@ def make_text(chains):
                 break
                 return text
             # print text
-        except KeyError:
-            break
-            return text
 
     return text
 
