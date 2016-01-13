@@ -1,4 +1,5 @@
 from random import choice
+import sys
 
 
 def open_and_read_file(file_path):
@@ -46,24 +47,25 @@ def make_chains(text_string):
 
 def make_text(chains):
     """Takes dictionary of markov chains; returns random text."""
-
+    # grabs a random key from dictionary (tuple)
     first_key = choice(chains.keys())
 
+    # adds two initial tuple words to text string
     text = first_key[0] + " " + first_key[1]
 
+    # creates list containing two initial words from tuple
     key_list = [first_key[0], first_key[1]]
     while True:   
-        # splitting text into a list, and indexing the words in the list
+      
+        # tries to grab a new word from the values associated with initial tuple/key
+        # adds new word to text string
+        # rebuilds key_list with new word in second position
         try:
             new_word = choice(chains[(key_list[0], key_list[1])])
             text = text + " " + new_word
             key_list = [key_list[1], new_word]
-            # text_list = text.split()
-            # current_pair = (text_list[-2], text_list[-1])
-
-            # try to to fetch a random value for the current_pair in our dictionary and add it to text string
-        # try:
-        #     text = text + " " + choice(chains[current_pair])
+            
+        # when choice selects "I am?", receives IndexError and quits loop
         except IndexError:
             break
             return text
@@ -71,7 +73,7 @@ def make_text(chains):
 
     return text
 
-input_path = "green-eggs.txt"
+input_path = sys.argv[1]
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
