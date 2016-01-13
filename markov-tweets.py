@@ -61,7 +61,7 @@ def make_text(chains):
 
     # creates list containing two initial words from tuple; limits to 126 characters for twitter
     key_list = [first_key[0], first_key[1]]
-    while len(text) < 127:   
+    while len(text) < 126:   
       
         # tries to grab a new word from the values associated with initial tuple/key
         # adds new word to text string
@@ -74,13 +74,15 @@ def make_text(chains):
         # when choice selects "I am?", receives IndexError and quits loop
         except IndexError:
             break
-    
     while text[-1] != " ":
         text = text[:-1]
+    while text[-1] not in [".", ",", "-", "~", ";", ":", "?", "!"]:
+        text = text[:-1]
                 
-    tweet = text + "#hack13right"
+    tweet = text + " #hack13right"
 
-    return tweet
+    if len(tweet) >13:
+        return tweet
 
 def tweet():
     api = twitter.Api(
@@ -105,8 +107,8 @@ chains = make_chains(input_text)
 # Produce random text
 random_tweet = make_text(chains)
 
-tweet()
-# print random_tweet
+# tweet()
+print random_tweet
 
 
 # open_and_read_file("green-eggs.txt")
