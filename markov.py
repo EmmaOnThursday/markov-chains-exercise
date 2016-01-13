@@ -47,15 +47,17 @@ def make_chains(text_string):
 
 def make_text(chains):
     """Takes dictionary of markov chains; returns random text."""
-    # grabs a random key from dictionary (tuple)
-    first_key = choice(chains.keys())
+    # ,makes a list of keys from dictionary(tuple) that starts with a capital letter
+    capital_keys = [key for key in chains.keys() if key[0].isupper()]
+    # grabs a random key from the list of capital_keys
+    first_key = choice(capital_keys)
 
     # adds two initial tuple words to text string
     text = first_key[0] + " " + first_key[1]
 
-    # creates list containing two initial words from tuple
+    # creates list containing two initial words from tuple; limits to 127 characters for twitter
     key_list = [first_key[0], first_key[1]]
-    while True:   
+    while len(text) < 127:   
       
         # tries to grab a new word from the values associated with initial tuple/key
         # adds new word to text string
@@ -68,10 +70,10 @@ def make_text(chains):
         # when choice selects "I am?", receives IndexError and quits loop
         except IndexError:
             break
-            return text
-            
 
-    return text
+    tweet = text + " #hack13right"
+
+    return tweet
 
 input_path = sys.argv[1]
 
