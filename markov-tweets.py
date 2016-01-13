@@ -1,7 +1,8 @@
+#!/home/user/src/markov-chains python
+
 import os
 
 from random import choice
-import sys
 
 import twitter
 
@@ -51,12 +52,15 @@ def make_chains(text_string):
 
 def make_text(chains):
     """Takes dictionary of markov chains; returns random text."""
-    # ,makes a list of keys from dictionary(tuple) that starts with a capital letter
-    capital_keys = [key for key in chains.keys() if key[0].isupper()]
+    
+    # makes a list of keys from dictionary(tuple) that starts with a capital letter
     # grabs a random key from the list of capital_keys
+    # adds two initial tuple words to text string
+
+    capital_keys = [key for key in chains.keys() if key[0].isupper()]
+    
     first_key = choice(capital_keys)
 
-    # adds two initial tuple words to text string
     text = first_key[0] + " " + first_key[1]
 
     # creates list containing two initial words from tuple; limits to 126 characters for twitter
@@ -74,6 +78,7 @@ def make_text(chains):
         # when choice selects "I am?", receives IndexError and quits loop
         except IndexError:
             break
+    
     while text[-1] != " ":
         text = text[:-1]
     while text[-1] not in [".", ",", "-", "~", ";", ":", "?", "!"]:
@@ -96,7 +101,7 @@ def tweet():
     status = api.PostUpdate(random_tweet)
     print status.text
 
-input_path = sys.argv[1]
+input_path = "/home/user/src/markov-chains/prince-bowie.txt"
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
@@ -107,8 +112,8 @@ chains = make_chains(input_text)
 # Produce random text
 random_tweet = make_text(chains)
 
-# tweet()
-print random_tweet
+tweet()
+# print random_tweet
 
 
 # open_and_read_file("green-eggs.txt")
