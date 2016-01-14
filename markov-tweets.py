@@ -1,4 +1,4 @@
-#!/usr/bin/python
+# this is for cron: #!/usr/bin/python
 
 
 import os

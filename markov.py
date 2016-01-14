@@ -30,18 +30,27 @@ def make_chains(text_string):
 
     words = text_string.split()
 
-    # make pairs of words
-    for i in range(len(words)-1):
-        pair = (words[i], words[i + 1])
-        # checking if pairs are in chains dictionary, if not adding them
-        if chains.get(pair, 0) == 0:
-            chains[pair] = []
-        # adding the next word as the value to the pairs keys in chains dictionary
-        if words[i + 1] != words[-1]:
-            next_word = words[i + 2]
-            chains[pair].append(next_word)
 
-    #print chains
+    # # make pairs of words
+    # for i in range(len(words)-1):
+    #     ngram = (words[i], words[i + 1])
+    #     # checking if pairs are in chains dictionary, if not adding them
+    #     if chains.get(ngram, 0) == 0:
+    #         chains[ngram] = []
+    #     # adding the next word as the value to the pairs keys in chains dictionary
+    #     if words[i + 1] != words[-1]:
+    #         next_word = words[i + 2]
+    #         chains[ngram].append(next_word)
+
+    for i in range(len(words)-n):
+        ngram_list = words[i:i+n]
+        ngram = tuple(item for item in ngram_list)
+        if chains.get(ngram, 0) == 0:
+                chains[ngram] = []
+        if words[i + n] != words[-1]:
+                next_word = words[i + n]
+                chains[ngram].append(next_word)
+
     return chains
 
 
@@ -49,33 +58,39 @@ def make_text(chains):
     """Takes dictionary of markov chains; returns random text."""
     # ,makes a list of keys from dictionary(tuple) that starts with a capital letter
     capital_keys = [key for key in chains.keys() if key[0].isupper()]
+
     # grabs a random key from the list of capital_keys
+    # adds two initial tuple words to text string
+    # creates list containing two initial words from tuple; limits to 127 characters for twitter
     first_key = choice(capital_keys)
 
-    # adds two initial tuple words to text string
-    text = first_key[0] + " " + first_key[1]
+    text = " ".join(first_key)
 
-    # creates list containing two initial words from tuple; limits to 127 characters for twitter
-    key_list = [first_key[0], first_key[1]]
-    while len(text) < 127:   
+    key_list = [item for item in first_key]
+    while True:   
       
         # tries to grab a new word from the values associated with initial tuple/key
         # adds new word to text string
         # rebuilds key_list with new word in second position
         try:
-            new_word = choice(chains[(key_list[0], key_list[1])])
+            new_word = choice(chains[tuple(item for item in key_list)])
             text = text + " " + new_word
-            key_list = [key_list[1], new_word]
+            key_list.append(new_word)
+            key_list = key_list[1:]
+            # print key_list
             
         # when choice selects "I am?", receives IndexError and quits loop
         except IndexError:
+            print "IndexError"
+            break
+        except KeyError:
+            print "KeyError"
             break
 
-    tweet = text + " #hack13right"
-
-    return tweet
+    return text
 
 input_path = sys.argv[1]
+n = int(sys.argv[2])
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
