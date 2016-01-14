@@ -1,4 +1,5 @@
-#!/home/user/src/markov-chains python
+#!/usr/bin/python
+
 
 import os
 
@@ -56,7 +57,6 @@ def make_text(chains):
     # makes a list of keys from dictionary(tuple) that starts with a capital letter
     # grabs a random key from the list of capital_keys
     # adds two initial tuple words to text string
-
     capital_keys = [key for key in chains.keys() if key[0].isupper()]
     
     first_key = choice(capital_keys)
@@ -96,10 +96,13 @@ def tweet():
         access_token_key = os.environ["TWITTER_ACCESS_TOKEN_KEY"],
         access_token_secret= os.environ["TWITTER_ACCESS_TOKEN_SECRET"])
 
-    print api.VerifyCredentials()
+    # print api.VerifyCredentials()
+
+    most_recent_status = api.GetUserTimeline('little_bowiebot')[0].text
+    print "Last Tweet: ", most_recent_status
 
     status = api.PostUpdate(random_tweet)
-    print status.text
+    print "Just Tweeted: ", status.text
 
 input_path = "/home/user/src/markov-chains/prince-bowie.txt"
 
@@ -113,7 +116,6 @@ chains = make_chains(input_text)
 random_tweet = make_text(chains)
 
 tweet()
+
 # print random_tweet
 
-
-# open_and_read_file("green-eggs.txt")
