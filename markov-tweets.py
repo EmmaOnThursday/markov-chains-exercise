@@ -1,11 +1,9 @@
 # this is for cron: #!/usr/bin/python
 
-
 import os
-
 from random import choice
-
 import twitter
+import sys
 
 
 def open_and_read_file(file_path):
@@ -104,7 +102,7 @@ def tweet():
     status = api.PostUpdate(random_tweet)
     print "Just Tweeted: ", status.text
 
-input_path = "/home/user/src/markov-chains/prince-bowie.txt"
+input_path = sys.argv[1]
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
